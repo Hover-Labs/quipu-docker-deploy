@@ -5,7 +5,7 @@ bash:
 	docker run \
 		--platform=linux/amd64 --rm -it \
 		-v $$(pwd):/shared \
-		--workdir=/shared/quipuswap-core \
+		--workdir=/quipuswap-core \
 		quipuswap-sandbox-deployer bash
 
 init:

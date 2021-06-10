@@ -7,6 +7,8 @@ COPY --from=ligolang/ligo:0.9.0 /nix/ /nix/
 
 COPY quipuswap-core/ /quipuswap-core/
 
-RUN cd /quipuswap-core && yarn install
+WORKDIR /quipuswap-core
 
-RUN "echo 'cd quipuswap-core/ && yarn install' >> /root/.bash_history"
+RUN yarn install
+
+RUN sh -c 'echo "yarn migrate" > /root/.bash_history'
