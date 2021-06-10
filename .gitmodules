@@ -1,0 +1,3 @@
+[submodule "quipuswap-core"]
+	path = quipuswap-core
+	url = https://github.com/madfish-solutions/quipuswap-core.git

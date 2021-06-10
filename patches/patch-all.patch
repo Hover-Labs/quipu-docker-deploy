@@ -1,0 +1,245 @@
+diff --git a/quipuswap-core/migrations/2_deploy_token_to_token_dex.js b/quipuswap-core/migrations/2_deploy_token_to_token_dex.js
+index 5c08147..53c7400 100644
+--- a/quipuswap-core/migrations/2_deploy_token_to_token_dex.js
++++ b/quipuswap-core/migrations/2_deploy_token_to_token_dex.js
+@@ -18,7 +18,7 @@ const defaultTokenId = 0;
+ 
+ module.exports = async (deployer, network, accounts) => {
+   tezos = new TezosToolkit(tezos.rpc.url);
+-  if (network === "development") return;
++  // if (network === "development") return;
+   const secretKey = accountsStored.alice.sk.trim();
+   tezos.setProvider({
+     config: {
+@@ -40,7 +40,7 @@ module.exports = async (deployer, network, accounts) => {
+   const dexInstance = await TTDex.deployed();
+   console.log(`TTDex address: ${dexInstance.address}`);
+ 
+-  const ligo = getLigo(true);
++  const ligo = getLigo(false);
+ 
+   for (dexFunction of dexFunctions) {
+     const stdout = execSync(
+@@ -55,7 +55,7 @@ module.exports = async (deployer, network, accounts) => {
+         value: JSON.parse(stdout.toString()).args[0].args[0].args[0],
+       },
+     });
+-    await operation.confirmation();
++    await new Promise(r => setTimeout(r, 2000))
+   }
+   for (tokenFunction of tokenFunctions[standard]) {
+     const stdout = execSync(
+@@ -70,7 +70,7 @@ module.exports = async (deployer, network, accounts) => {
+         value: JSON.parse(stdout.toString()).args[0].args[0].args[0],
+       },
+     });
+-    await operation.confirmation();
++    await new Promise(r => setTimeout(r, 2000))
+   }
+ 
+   if (network !== "mainnet") {
+@@ -90,11 +90,11 @@ module.exports = async (deployer, network, accounts) => {
+       let operation = await token0Instance.methods
+         .approve(dexInstance.address.toString(), initialTokenAmount)
+         .send();
+-      await operation.confirmation();
++      await new Promise(r => setTimeout(r, 2000))
+       operation = await token1Instance.methods
+         .approve(dexInstance.address.toString(), initialTokenAmount)
+         .send();
+-      await operation.confirmation();
++      await new Promise(r => setTimeout(r, 2000))
+ 
+       operation = await dex.methods
+         .use(
+@@ -109,7 +109,7 @@ module.exports = async (deployer, network, accounts) => {
+           initialTokenAmount
+         )
+         .send();
+-      await operation.confirmation();
++      await new Promise(r => setTimeout(r, 2000))
+     } else {
+       let operation = await token0Instance.methods
+         .update_operators([
+@@ -122,7 +122,7 @@ module.exports = async (deployer, network, accounts) => {
+           },
+         ])
+         .send();
+-      await operation.confirmation();
++      await new Promise(r => setTimeout(r, 2000))
+       operation = await token1Instance.methods
+         .update_operators([
+           {
+@@ -134,7 +134,7 @@ module.exports = async (deployer, network, accounts) => {
+           },
+         ])
+         .send();
+-      await operation.confirmation();
++      await new Promise(r => setTimeout(r, 2000))
+       let pair = {
+         token_a_address: token0Instance.address.toString(),
+         token_b_address: token1Instance.address.toString(),
+@@ -156,7 +156,7 @@ module.exports = async (deployer, network, accounts) => {
+           initialTokenAmount
+         )
+         .send();
+-      await operation.confirmation();
++      await new Promise(r => setTimeout(r, 2000))
+     }
+   }
+ };
+diff --git a/quipuswap-core/migrations/4_deploy_dex.js b/quipuswap-core/migrations/4_deploy_dex.js
+index 6235100..ee4b63e 100644
+--- a/quipuswap-core/migrations/4_deploy_dex.js
++++ b/quipuswap-core/migrations/4_deploy_dex.js
+@@ -20,7 +20,7 @@ const defaultTokenId = 0;
+ 
+ module.exports = async (deployer, network, accounts) => {
+   tezos = new TezosToolkit(tezos.rpc.url);
+-  if (network === "development") return;
++  // if (network === "development") return;
+   const secretKey = accountsStored.alice.sk.trim();
+   tezos.setProvider({
+     config: {
+@@ -45,7 +45,7 @@ module.exports = async (deployer, network, accounts) => {
+   const factoryInstance = await Factory.deployed();
+   console.log(`Factory address: ${factoryInstance.address}`);
+ 
+-  const ligo = getLigo(true);
++  const ligo = getLigo(false);
+ 
+   for (dexFunction of dexFunctions) {
+     const stdout = execSync(
+@@ -60,7 +60,7 @@ module.exports = async (deployer, network, accounts) => {
+         value: JSON.parse(stdout.toString()).args[0].args[0],
+       },
+     });
+-    await confirmOperation(tezos, operation.hash);
++    await new Promise(r => setTimeout(r, 2000))
+   }
+   for (tokenFunction of tokenFunctions[standard]) {
+     const stdout = execSync(
+@@ -75,7 +75,7 @@ module.exports = async (deployer, network, accounts) => {
+         value: JSON.parse(stdout.toString()).args[0],
+       },
+     });
+-    await confirmOperation(tezos, operation.hash);
++    await new Promise(r => setTimeout(r, 2000))
+   }
+ 
+   if (network !== "mainnet") {
+@@ -92,11 +92,11 @@ module.exports = async (deployer, network, accounts) => {
+       let operation = await token0Instance.methods
+         .approve(factoryInstance.address.toString(), initialTokenAmount)
+         .send();
+-      await confirmOperation(tezos, operation.hash);
++      await new Promise(r => setTimeout(r, 2000))
+       operation = await token1Instance.methods
+         .approve(factoryInstance.address.toString(), initialTokenAmount)
+         .send();
+-      await confirmOperation(tezos, operation.hash);
++      await new Promise(r => setTimeout(r, 2000))
+       await factoryInstance.launchExchange(
+         token0Instance.address.toString(),
+         initialTokenAmount,
+@@ -119,7 +119,7 @@ module.exports = async (deployer, network, accounts) => {
+           },
+         ])
+         .send();
+-      await confirmOperation(tezos, operation.hash);
++      await new Promise(r => setTimeout(r, 2000))
+       operation = await token1Instance.methods
+         .update_operators([
+           {
+@@ -131,21 +131,21 @@ module.exports = async (deployer, network, accounts) => {
+           },
+         ])
+         .send();
+-      await confirmOperation(tezos, operation.hash);
++      await new Promise(r => setTimeout(r, 2000))
+       operation = await factoryInstance.launchExchange(
+         token0Instance.address.toString(),
+         defaultTokenId,
+         initialTokenAmount,
+         { amount: initialTezAmount }
+       );
+-      await confirmOperation(tezos, operation.hash);
++      await new Promise(r => setTimeout(r, 2000))
+       operation = await factoryInstance.launchExchange(
+         token1Instance.address.toString(),
+         defaultTokenId,
+         initialTokenAmount,
+         { amount: initialTezAmount }
+       );
+-      await confirmOperation(tezos, operation.hash);
++      await new Promise(r => setTimeout(r, 2000))
+     }
+   }
+ };
+diff --git a/quipuswap-core/patches/truffle+5.5.0-tezos.4.patch b/quipuswap-core/patches/truffle+5.5.0-tezos.4.patch
+index f60ef2b..b06cd79 100644
+--- a/quipuswap-core/patches/truffle+5.5.0-tezos.4.patch
++++ b/quipuswap-core/patches/truffle+5.5.0-tezos.4.patch
+@@ -1,31 +1,32 @@
+ diff --git a/node_modules/truffle/build/cli.bundled.js b/node_modules/truffle/build/cli.bundled.js
+-index a84a254..ef05d8b 100755
++index a84a254..5c03d3d 100755
+ --- a/node_modules/truffle/build/cli.bundled.js
+ +++ b/node_modules/truffle/build/cli.bundled.js
+-@@ -209261,7 +209261,7 @@ var contract_sources_1 = __importDefault(__webpack_require__(111));
+- var profiler_1 = __importDefault(__webpack_require__(151));
+- var compiler = {
+-     name: "ligo",
+--    version: "next"
+-+    version: "0.9.0"
+- };
+- var LIGO_PATTERN = "**/*.{ligo,mligo,religo}";
+- var compile = {};
+ @@ -209312,7 +209312,7 @@ compile.display = function (paths, _a, entryPoint) {
+  // -------- End of common with truffle-compile --------
+  // Check that ligo is available
+  function checkLigo(callback) {
+ -    child_process_1.exec("docker run --rm -i ligolang/ligo:next --help", function (err, stdout, stderr) {
+-+    child_process_1.exec("docker run --rm -i ligolang/ligo:0.9.0 --help", function (err, stdout, stderr) {
+++    child_process_1.exec("ligo --help", function (err, stdout, stderr) {
+          if (err)
+              return callback(colors_1.default.red("Error executing ligo:") + "\n" + stderr);
+          callback(null);
+-@@ -209343,7 +209343,7 @@ function execLigo(sourcePath, entryPoint) {
+-             currentWorkingDirectory + ":/project",
+-             "--rm",
+-             "-i",
++@@ -209337,16 +209337,10 @@ function execLigo(sourcePath, entryPoint) {
++             .normalize("/project" + sourcePath.replace(currentWorkingDirectory, ""))
++             .replace(/\\/g, "/");
++         // Use spawn() instead of exec() here so that the OS can take care of escaping args.
++-        var docker = child_process_1.spawn("docker", [
++-            "run",
++-            "-v",
++-            currentWorkingDirectory + ":/project",
++-            "--rm",
++-            "-i",
+ -            "ligolang/ligo:next",
+-+            "ligolang/ligo:0.9.0",
+++        var docker = child_process_1.spawn("ligo", [
+              "compile-contract",
+              "--michelson-format=json",
+-             fullInternalSourcePath,
++-            fullInternalSourcePath,
+++            sourcePath,
++             entryPoint
++         ]);
++         var stdout = "";
+diff --git a/quipuswap-core/truffle-config.js b/quipuswap-core/truffle-config.js
+index fafc0a8..05f1afe 100644
+--- a/quipuswap-core/truffle-config.js
++++ b/quipuswap-core/truffle-config.js
+@@ -11,7 +11,7 @@ module.exports = {
+   contracts_directory: "./contracts/main",
+   networks: {
+     development: {
+-      host: "http://localhost",
++      host: "http://host.docker.internal",
+       port: 8732,
+       network_id: "*",
+       secretKey: alice.sk,
