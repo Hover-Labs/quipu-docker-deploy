@@ -9,6 +9,8 @@ COPY quipuswap-core/ /quipuswap-core/
 
 WORKDIR /quipuswap-core
 
+RUN rm .git/
+
 RUN yarn install
 
 RUN sh -c 'echo "yarn migrate" > /root/.bash_history'
