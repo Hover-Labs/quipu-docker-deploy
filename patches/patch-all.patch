@@ -3,7 +3,7 @@ index 5c08147..53c7400 100644
 --- a/quipuswap-core/migrations/2_deploy_token_to_token_dex.js
 +++ b/quipuswap-core/migrations/2_deploy_token_to_token_dex.js
 @@ -18,7 +18,7 @@ const defaultTokenId = 0;
- 
+
  module.exports = async (deployer, network, accounts) => {
    tezos = new TezosToolkit(tezos.rpc.url);
 -  if (network === "development") return;
@@ -14,10 +14,10 @@ index 5c08147..53c7400 100644
 @@ -40,7 +40,7 @@ module.exports = async (deployer, network, accounts) => {
    const dexInstance = await TTDex.deployed();
    console.log(`TTDex address: ${dexInstance.address}`);
- 
+
 -  const ligo = getLigo(true);
 +  const ligo = getLigo(false);
- 
+
    for (dexFunction of dexFunctions) {
      const stdout = execSync(
 @@ -55,7 +55,7 @@ module.exports = async (deployer, network, accounts) => {
@@ -25,7 +25,7 @@ index 5c08147..53c7400 100644
        },
      });
 -    await operation.confirmation();
-+    await new Promise(r => setTimeout(r, 2000))
++    await new Promise(r => setTimeout(r, 6000))
    }
    for (tokenFunction of tokenFunctions[standard]) {
      const stdout = execSync(
@@ -34,22 +34,22 @@ index 5c08147..53c7400 100644
        },
      });
 -    await operation.confirmation();
-+    await new Promise(r => setTimeout(r, 2000))
++    await new Promise(r => setTimeout(r, 6000))
    }
- 
+
    if (network !== "mainnet") {
 @@ -90,11 +90,11 @@ module.exports = async (deployer, network, accounts) => {
        let operation = await token0Instance.methods
          .approve(dexInstance.address.toString(), initialTokenAmount)
          .send();
 -      await operation.confirmation();
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        operation = await token1Instance.methods
          .approve(dexInstance.address.toString(), initialTokenAmount)
          .send();
 -      await operation.confirmation();
-+      await new Promise(r => setTimeout(r, 2000))
- 
++      await new Promise(r => setTimeout(r, 6000))
+
        operation = await dex.methods
          .use(
 @@ -109,7 +109,7 @@ module.exports = async (deployer, network, accounts) => {
@@ -57,7 +57,7 @@ index 5c08147..53c7400 100644
          )
          .send();
 -      await operation.confirmation();
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
      } else {
        let operation = await token0Instance.methods
          .update_operators([
@@ -66,7 +66,7 @@ index 5c08147..53c7400 100644
          ])
          .send();
 -      await operation.confirmation();
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        operation = await token1Instance.methods
          .update_operators([
            {
@@ -75,7 +75,7 @@ index 5c08147..53c7400 100644
          ])
          .send();
 -      await operation.confirmation();
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        let pair = {
          token_a_address: token0Instance.address.toString(),
          token_b_address: token1Instance.address.toString(),
@@ -84,7 +84,7 @@ index 5c08147..53c7400 100644
          )
          .send();
 -      await operation.confirmation();
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
      }
    }
  };
@@ -93,7 +93,7 @@ index 6235100..ee4b63e 100644
 --- a/quipuswap-core/migrations/4_deploy_dex.js
 +++ b/quipuswap-core/migrations/4_deploy_dex.js
 @@ -20,7 +20,7 @@ const defaultTokenId = 0;
- 
+
  module.exports = async (deployer, network, accounts) => {
    tezos = new TezosToolkit(tezos.rpc.url);
 -  if (network === "development") return;
@@ -104,10 +104,10 @@ index 6235100..ee4b63e 100644
 @@ -45,7 +45,7 @@ module.exports = async (deployer, network, accounts) => {
    const factoryInstance = await Factory.deployed();
    console.log(`Factory address: ${factoryInstance.address}`);
- 
+
 -  const ligo = getLigo(true);
 +  const ligo = getLigo(false);
- 
+
    for (dexFunction of dexFunctions) {
      const stdout = execSync(
 @@ -60,7 +60,7 @@ module.exports = async (deployer, network, accounts) => {
@@ -115,7 +115,7 @@ index 6235100..ee4b63e 100644
        },
      });
 -    await confirmOperation(tezos, operation.hash);
-+    await new Promise(r => setTimeout(r, 2000))
++    await new Promise(r => setTimeout(r, 6000))
    }
    for (tokenFunction of tokenFunctions[standard]) {
      const stdout = execSync(
@@ -124,21 +124,21 @@ index 6235100..ee4b63e 100644
        },
      });
 -    await confirmOperation(tezos, operation.hash);
-+    await new Promise(r => setTimeout(r, 2000))
++    await new Promise(r => setTimeout(r, 6000))
    }
- 
+
    if (network !== "mainnet") {
 @@ -92,11 +92,11 @@ module.exports = async (deployer, network, accounts) => {
        let operation = await token0Instance.methods
          .approve(factoryInstance.address.toString(), initialTokenAmount)
          .send();
 -      await confirmOperation(tezos, operation.hash);
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        operation = await token1Instance.methods
          .approve(factoryInstance.address.toString(), initialTokenAmount)
          .send();
 -      await confirmOperation(tezos, operation.hash);
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        await factoryInstance.launchExchange(
          token0Instance.address.toString(),
          initialTokenAmount,
@@ -147,7 +147,7 @@ index 6235100..ee4b63e 100644
          ])
          .send();
 -      await confirmOperation(tezos, operation.hash);
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        operation = await token1Instance.methods
          .update_operators([
            {
@@ -156,7 +156,7 @@ index 6235100..ee4b63e 100644
          ])
          .send();
 -      await confirmOperation(tezos, operation.hash);
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        operation = await factoryInstance.launchExchange(
          token0Instance.address.toString(),
          defaultTokenId,
@@ -164,7 +164,7 @@ index 6235100..ee4b63e 100644
          { amount: initialTezAmount }
        );
 -      await confirmOperation(tezos, operation.hash);
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
        operation = await factoryInstance.launchExchange(
          token1Instance.address.toString(),
          defaultTokenId,
@@ -172,7 +172,7 @@ index 6235100..ee4b63e 100644
          { amount: initialTezAmount }
        );
 -      await confirmOperation(tezos, operation.hash);
-+      await new Promise(r => setTimeout(r, 2000))
++      await new Promise(r => setTimeout(r, 6000))
      }
    }
  };
@@ -239,7 +239,7 @@ index fafc0a8..05f1afe 100644
    networks: {
      development: {
 -      host: "http://localhost",
-+      host: "http://host.docker.internal",
++      host: "http://172.17.0.1",
        port: 8732,
        network_id: "*",
        secretKey: alice.sk,
