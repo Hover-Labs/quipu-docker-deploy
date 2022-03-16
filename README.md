@@ -10,7 +10,7 @@ Assumptions:
 
 ```
 $ git clone --recurse-submodules git@github.com:Hover-Labs/quipu-docker-deploy.git
-$ make init build-docker bash
+$ make init build-docker bash deploy
 
 --- Inside the docker image ---
 

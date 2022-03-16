@@ -239,7 +239,8 @@ index fafc0a8..05f1afe 100644
    networks: {
      development: {
 -      host: "http://localhost",
-+      host: "http://172.17.0.1",
-       port: 8732,
+-      port: 8732,
++      host: "https://sandbox.hover.engineering",
++      port: 443,
        network_id: "*",
        secretKey: alice.sk,

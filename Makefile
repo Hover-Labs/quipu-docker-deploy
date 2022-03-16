@@ -8,7 +8,7 @@ bash:
 		--workdir=/quipuswap-core \
 		quipuswap-sandbox-deployer bash
 
-run:
+deploy:
 	docker run --rm -it --workdir=/quipuswap-core quipuswap-sandbox-deployer npm run migrate
 
 init:
